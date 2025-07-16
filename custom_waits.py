@@ -12,3 +12,5 @@ class newPostAppeared():
                 return True
             else:
                 return False
+        except:
+            False

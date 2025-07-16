@@ -1,8 +1,11 @@
 from dotenv import load_dotenv
 import os
 import time
+import json
 
-from selenium import webdriver
+from seleniumwire import webdriver
+from seleniumwire.utils import decode as decodesw
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
@@ -26,20 +29,17 @@ class IstaScrap():
         chrome_options = Options()
         chrome_options.add_argument("--lang=en")
         chrome_options.add_argument("--start-maximized")
+        chrome_options.add_experimental_option("detach", True)
         self.browser = webdriver.Chrome(options=chrome_options)
 
     def login(self):
-        # Checking if already login
-        try:
-            self.browser.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/div/div/div/div')
-        except:
-            return
-
         load_dotenv(override=True)
         self.browser.get('https://www.instagram.com')
         self.browser.maximize_window()
 
-        user_input = self.browser.find_element(By.XPATH, '//*[@id="loginForm"]/div[1]/div[1]/div/label/input')
+        user_input = WebDriverWait(self.browser, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div[1]/div[1]/div/label/input')))
+        #self.browser.find_element(By.XPATH, '//*[@id="loginForm"]/div[1]/div[1]/div/label/input')
         user_input.send_keys(f'{os.getenv('INSTA_NAME')}')
 
         pass_input = self.browser.find_element(By.XPATH, '//*[@id="loginForm"]/div[1]/div[2]/div/label/input')
@@ -87,8 +87,42 @@ class IstaScrap():
                 if newScrollHeight == scrollHeight:
                     break
 
+    def getProfileInfo(self):
+        self.login()
+        self.browser.get(self.userURL)
+        try:
+            WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//div[contains(@role, "button")]')))
+        except:
+            pass
 
+        requests = self.browser.requests
+        queries = [request for request in requests if request.headers['x-root-field-name'] == 'fetch__XDTUserDict']
+
+        try:
+            response = queries[0].response
+            body = decodesw(response.body, response.headers.get('Content-Encoding', 'identity'))
+            fullInfo = json.loads(body.decode('utf-8'))
+        except:
+            return
+        
+        userInfo = fullInfo['data']['user']
+        profileInfo = {
+            'username': userInfo['username'],
+            'full_name': userInfo['full_name'],
+            'biography': userInfo['biography'],
+            'is_verified': userInfo['is_verified'],
+            'follower_count': userInfo['follower_count'],
+            'following_count': userInfo['following_count'],
+            'post_count': userInfo['media_count'],
+            'bio_links': userInfo['bio_links']
+        }
+
+        return profileInfo, fullInfo
+    
 if __name__ == '__main__':
     user = 'zelenskyy_official'
     x =  IstaScrap(user)
-    x.login()
+    #x.login()
+    info, _ = x.getProfileInfo()
+    print(info)
