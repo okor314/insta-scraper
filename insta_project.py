@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 import time
 import json
+import datetime
 
 from seleniumwire import webdriver
 from seleniumwire.utils import decode as decodesw
@@ -54,14 +55,24 @@ class IstaScrap():
         notnow_btn.click()
     
     def getPosts(self):
+        reqs = driver.requests
+        queries = [request for request in reqs if request.headers['x-root-field-name'] == 'xdt_api__v1__feed__user_timeline_graphql_connection']
+        startPoint = len(queries) 
+
         self.browser.get(self.userURL)
-        dataDict = {
+        try:
+            WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//div[contains(@role, "button")]')))
+        except:
+            pass
+
+        fullData = []
+        simpleData = {
             'type': [],
             'date': [],
             'description': [],
             'likes': [],
-            'post_link': [],
-            'content_link': []
+            'post_link': []
         }
         
         while True:   
@@ -69,23 +80,46 @@ class IstaScrap():
 
             visiblePosts = self.browser.find_elements(By.XPATH, '//a[contains(@href, "/p/") or contains(@href, "/reel/")]')
 
-            newPosts = [post for post in visiblePosts if post.get_attribute('href') not in dataDict['post_link']]
+            newPosts = [post for post in visiblePosts if post.get_attribute('href') not in simpleData['post_link']]
             post_links = [post.get_attribute('href') for post in newPosts]
             post_types = [errorCatcher(lambda x: x.find_element(By.TAG_NAME, 'svg').get_attribute('aria-label'), lambda x: None, post) 
                     for post in newPosts]
             
-            dataDict['type'].extend(post_types)
-            dataDict['post_link'].extend(post_links)
+            simpleData['type'].extend(post_types)
+            simpleData['post_link'].extend(post_links)
 
             self.browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
 
             try:
                 WebDriverWait(self.browser, 15, ignored_exceptions=StaleElementReferenceException)\
-                    .until(newPostAppeared(dataDict['post_link']))
+                    .until(newPostAppeared(simpleData['post_link']))
             except TimeoutException:
                 newScrollHeight = self.browser.execute_script('return document.body.scrollHeight')
                 if newScrollHeight == scrollHeight:
                     break
+            
+            reqs = self.browser.requests
+            queries = [request for request in reqs if request.headers['x-root-field-name'] == 'xdt_api__v1__feed__user_timeline_graphql_connection']
+            queries = queries[startPoint:]
+
+            for querie in queries:
+                response = querie.response
+
+                data = decodesw(response.body, response.headers.get('Content-Encoding', 'identity'))
+                jsonData = json.loads(data.decode('utf-8'))
+                fullData.extend(jsonData['data']['xdt_api__v1__feed__user_timeline_graphql_connection']['edges'])
+
+            # Populate dictionary with simplified data
+            simpleData['type'] = [post['node']['product_type'] for post in fullData]
+            simpleData['date'] = [datetime.datetime.fromtimestamp(post['node']['taken_at'], datetime.UTC).strftime('%Y-%m-%d %H:%M:%S')
+                                for post in fullData]
+            
+            simpleData['description'] = [post['node']['caption']['text'] for post in fullData]
+            simpleData['likes'] = [post['node']['like_count'] for post in fullData]
+            simpleData['post_link'] = [self.userURL + '/' + 
+                                       post['node']['code'] for post in fullData]
+            
+            return simpleData, fullData
 
     def getProfileInfo(self):
         self.login()
