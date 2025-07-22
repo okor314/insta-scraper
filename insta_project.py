@@ -22,7 +22,7 @@ def errorCatcher(func, heandler, *args, **kwargs):
     except Exception as e:
         heandler(e)
 
-class IstaScrap():
+class InstaScrap():
     def __init__(self, username):
         self.username = username
         self.userURL = f'https://www.instagram.com/{self.username}'
@@ -55,13 +55,13 @@ class IstaScrap():
         notnow_btn.click()
     
     def getPosts(self):
-        reqs = driver.requests
+        reqs = self.browser.requests
         queries = [request for request in reqs if request.headers['x-root-field-name'] == 'xdt_api__v1__feed__user_timeline_graphql_connection']
         startPoint = len(queries) 
 
         self.browser.get(self.userURL)
         try:
-            WebDriverWait(driver, 10).until(
+            WebDriverWait(self.browser, 10).until(
             EC.presence_of_element_located((By.XPATH, '//div[contains(@role, "button")]')))
         except:
             pass
@@ -194,7 +194,7 @@ class IstaScrap():
     
 if __name__ == '__main__':
     user = 'zelenskyy_official'
-    x =  IstaScrap(user)
+    x =  InstaScrap(user)
     #x.login()
     info, _ = x.getProfileInfo()
     print(info)
