@@ -1,0 +1,92 @@
+{
+    "data": {
+        "user": {
+            "account_badges": [],
+            "account_type": 2,
+            "address_street": "",
+            "ai_agent_type": null,
+            "bio_links": [],
+            "biography": "\ud83e\udec2\u0414\u043e\u043f\u043e\u043c\u043e\u0436\u0443 \u0442\u043e\u0431\u0456 \u0441\u0442\u0432\u043e\u0440\u0438\u0442\u0438 \u0441\u0432\u043e\u044e\n\u0456\u0434\u0435\u0430\u043b\u044c\u043d\u0443 \u0444\u0456\u0433\u0443\u0440\u0443\ud83d\udcab  \n\ud83d\udd12\u0422\u0413\u041a \u0437 \u0442\u0440\u0435\u043d\u0443\u0432\u0430\u043d\u043d\u044f\u043c\u0438 \u0432 \u0445\u0430\u0439\u043b\u0430\u0439\u0442\u0441\ud83d\udccc\n\ud83d\udcc0TikTok 56k+ \u269c\ufe0fangel_flare\ud83c\udfb7\n\ud83d\udccd\u0417\u0430\u043f\u043e\u0440\u0456\u0436\u0436\u044f \ud83c\uddfa\ud83c\udde6",
+            "biography_with_entities": {
+                "entities": []
+            },
+            "category": "Blogger",
+            "city_name": "",
+            "external_lynx_url": null,
+            "external_url": "",
+            "fbid_v2": "17841451830495184",
+            "follower_count": 731,
+            "following_count": 88,
+            "friendship_status": {
+                "blocking": false,
+                "followed_by": false,
+                "following": false,
+                "incoming_request": false,
+                "is_bestie": false,
+                "is_feed_favorite": false,
+                "is_muting_reel": false,
+                "is_restricted": false,
+                "muting": false,
+                "outgoing_request": false
+            },
+            "full_name": "ANHELINA | \u041f\u0440\u043e \u0442\u0456\u043b\u043e \u043c\u0440\u0456\u0457 \u0431\u0435\u0437 \u0420\u0425\u041f\ud83e\udebd",
+            "gating": null,
+            "has_chaining": true,
+            "has_profile_pic": null,
+            "has_story_archive": null,
+            "hd_profile_pic_url_info": {
+                "url": "https://instagram.fiev13-1.fna.fbcdn.net/v/t51.2885-19/504199882_18015834137727684_7384447429302728045_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fiev13-1.fna.fbcdn.net&_nc_cat=100&_nc_oc=Q6cZ2QHqKpOeceTJIvmTxwAnFV_alNZL1MUsLasa9UWJptdd4HXTZU2QnGnd_MeS9LyEboI&_nc_ohc=UL8s23IUrqkQ7kNvwEEAeT_&_nc_gid=4zbSHTrZIjcM2h27GnIFEw&edm=ALGbJPMBAAAA&ccb=7-5&oh=00_AfQvnY4kZBC_TaeimhOZ0TjcHBraCZGfQ-2FJJB6HBzELQ&oe=68856626&_nc_sid=7d3ac5"
+            },
+            "id": "51641479683",
+            "is_business": true,
+            "is_embeds_disabled": false,
+            "is_memorialized": false,
+            "is_private": false,
+            "is_professional_account": null,
+            "is_regulated_c18": false,
+            "is_unpublished": false,
+            "is_verified": false,
+            "latest_besties_reel_media": 0,
+            "latest_reel_media": 0,
+            "linked_fb_info": null,
+            "live_broadcast_id": null,
+            "live_broadcast_visibility": null,
+            "media_count": 63,
+            "mutual_followers_count": 0,
+            "pk": "51641479683",
+            "profile_context_links_with_user_ids": [],
+            "profile_pic_genai_tool_info": [],
+            "profile_pic_url": "https://instagram.fiev13-1.fna.fbcdn.net/v/t51.2885-19/504199882_18015834137727684_7384447429302728045_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fiev13-1.fna.fbcdn.net&_nc_cat=100&_nc_oc=Q6cZ2QHqKpOeceTJIvmTxwAnFV_alNZL1MUsLasa9UWJptdd4HXTZU2QnGnd_MeS9LyEboI&_nc_ohc=UL8s23IUrqkQ7kNvwEEAeT_&_nc_gid=4zbSHTrZIjcM2h27GnIFEw&edm=ALGbJPMBAAAA&ccb=7-5&oh=00_AfTv4sbOgF7lKVwoen_U7c2PKD7Huj70-5gOUWJCqRRsYg&oe=68856626&_nc_sid=7d3ac5",
+            "pronouns": [],
+            "reel_media_seen_timestamp": null,
+            "regulated_news_in_locations": [],
+            "remove_message_entrypoint": false,
+            "should_show_category": false,
+            "show_account_transparency_details": true,
+            "show_text_post_app_badge": true,
+            "supervision_info": null,
+            "text_post_app_badge_label": "diamond_anglln",
+            "text_post_new_post_count": 0,
+            "total_clips_count": 1,
+            "transparency_label": null,
+            "transparency_product": null,
+            "username": "diamond_anglln",
+            "zip": ""
+        },
+        "viewer": {
+            "user": {
+                "can_see_organic_insights": false,
+                "id": "75033021276",
+                "pk": "75033021276"
+            }
+        }
+    },
+    "extensions": {
+        "is_final": true,
+        "server_metadata": {
+            "request_start_time_ms": 1753193890784,
+            "time_at_flush_ms": 1753193890933
+        }
+    },
+    "status": "ok"
+}
