@@ -154,6 +154,44 @@ class IstaScrap():
 
         return profileInfo, fullInfo
     
+    def getFollowers(self, stopAt):
+        followersData = [{}]
+        
+        self.browser.get(self.userURL)
+        followersButton = WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//a[contains(@href, "followers")]'))
+        )
+
+        req = self.browser.requests
+        followersReq = [request for request in req if 'followers' in request.url]
+        startPoint = len(followersReq)
+
+        followersButton.click()
+        WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//div[contains(@role, "dialog")]/div/div[2]/div/div/div[3]/div[1]/div/div[1]/div/div/div/div[3]/div/button'))
+        )
+
+        dialog = self.browser.find_element(By.XPATH, '//div[contains(@role, "dialog")]')
+
+        while len(followersData) < stopAt:
+            req = self.browser.requests
+            followersReq = [request for request in req if 'followers' in request.url][-1]
+            response = followersReq.response
+            
+            data = decodesw(response.body, response.headers.get('Content-Encoding', 'identity'))
+            jsonData = json.loads(data.decode('utf-8'))
+            if jsonData['users'][-1] == followersData[-1]:
+                break
+            followersData.extend(jsonData['users'])
+
+            followers = dialog.find_elements(By.TAG_NAME, 'button')
+            self.browser.execute_script('arguments[0].scrollIntoView({block: "center", behavior: "smooth"});', followers[-1])
+            time.sleep(1)
+            
+        followersData.pop(0)   
+        
+        return followersData
+    
 if __name__ == '__main__':
     user = 'zelenskyy_official'
     x =  IstaScrap(user)
