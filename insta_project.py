@@ -98,28 +98,28 @@ class InstaScrap():
                 if newScrollHeight == scrollHeight:
                     break
             
-            reqs = self.browser.requests
-            queries = [request for request in reqs if request.headers['x-root-field-name'] == 'xdt_api__v1__feed__user_timeline_graphql_connection']
-            queries = queries[startPoint:]
+        reqs = self.browser.requests
+        queries = [request for request in reqs if request.headers['x-root-field-name'] == 'xdt_api__v1__feed__user_timeline_graphql_connection']
+        queries = queries[startPoint:]
 
-            for querie in queries:
-                response = querie.response
+        for querie in queries:
+            response = querie.response
 
-                data = decodesw(response.body, response.headers.get('Content-Encoding', 'identity'))
-                jsonData = json.loads(data.decode('utf-8'))
-                fullData.extend(jsonData['data']['xdt_api__v1__feed__user_timeline_graphql_connection']['edges'])
+            data = decodesw(response.body, response.headers.get('Content-Encoding', 'identity'))
+            jsonData = json.loads(data.decode('utf-8'))
+            fullData.extend(jsonData['data']['xdt_api__v1__feed__user_timeline_graphql_connection']['edges'])
 
-            # Populate dictionary with simplified data
-            simpleData['type'] = [post['node']['product_type'] for post in fullData]
-            simpleData['date'] = [datetime.datetime.fromtimestamp(post['node']['taken_at'], datetime.UTC).strftime('%Y-%m-%d %H:%M:%S')
-                                for post in fullData]
-            
-            simpleData['description'] = [post['node']['caption']['text'] for post in fullData]
-            simpleData['likes'] = [post['node']['like_count'] for post in fullData]
-            simpleData['post_link'] = [self.userURL + '/' + 
-                                       post['node']['code'] for post in fullData]
-            
-            return simpleData, fullData
+        # Populate dictionary with simplified data
+        simpleData['type'] = [post['node']['product_type'] for post in fullData]
+        simpleData['date'] = [datetime.datetime.fromtimestamp(post['node']['taken_at'], datetime.UTC).strftime('%Y-%m-%d %H:%M:%S')
+                            for post in fullData]
+        
+        simpleData['description'] = [post['node']['caption']['text'] for post in fullData]
+        simpleData['likes'] = [post['node']['like_count'] for post in fullData]
+        simpleData['post_link'] = [self.userURL + '/' + 
+                                    post['node']['code'] for post in fullData]
+        
+        return simpleData, fullData
 
     def getProfileInfo(self):
         self.login()
@@ -193,8 +193,26 @@ class InstaScrap():
         return followersData
     
 if __name__ == '__main__':
-    user = 'zelenskyy_official'
-    x =  InstaScrap(user)
-    #x.login()
-    info, _ = x.getProfileInfo()
-    print(info)
+    user = 'diamond_anglln'
+    path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/') + '/data/'
+
+    iScraper = InstaScrap(user)
+
+    # profileInfo, fullInfo = iScraper.getProfileInfo()
+    # with open(path+'short_profile_info.json', 'w') as f:
+    #     f.write(json.dumps(profileInfo, sort_keys=True, indent=4))
+    # with open(path+'full_profile_info.json', 'w') as f:
+    #     f.write(json.dumps(fullInfo, sort_keys=True, indent=4))
+    iScraper.login()
+
+    # followersData = iScraper.getFollowers(100)
+    # with open(path+'short_profile_info.json', 'w') as f:
+    #     f.write(json.dumps(followersData, sort_keys=True, indent=4))
+
+    simpleData, fullData = iScraper.getPosts()
+    with open(path+'short_posts_data.json', 'w') as f:
+        f.write(json.dumps(simpleData, sort_keys=True, indent=4))
+    with open(path+'full_posts_data.json', 'w') as f:
+        f.write(json.dumps(fullData, sort_keys=True, indent=4))
+
+    
